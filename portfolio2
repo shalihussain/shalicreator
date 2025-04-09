@@ -1,0 +1,137 @@
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Menu } from "lucide-react";
+
+const TYPING_TEXT = "Shali.Creator";
+
+if (typeof window !== "undefined") {
+  document.documentElement.style.scrollBehavior = "smooth";
+}
+
+const ShaliPortfolio = () => {
+  if (typeof window === "undefined") return null;
+
+  const [filter, setFilter] = useState("All");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [typedText, setTypedText] = useState("");
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    let timeout;
+    if (index <= TYPING_TEXT.length) {
+      timeout = setTimeout(() => {
+        setTypedText(TYPING_TEXT.slice(0, index));
+        setIndex(index + 1);
+      }, 150);
+    } else {
+      timeout = setTimeout(() => {
+        setIndex(0);
+        setTypedText("");
+      }, 3000);
+    }
+    return () => clearTimeout(timeout);
+  }, [index]);
+
+  const projects = [
+    { title: "Brand Identity for EcoWave", description: "Empower artists to showcase their work globally.", year: "2022" },
+    { title: "UX Redesign for HealthTrack App", description: "From stunning websites to interactive digital exhibits.", year: "2023" },
+    { title: "Visual Identity for The Artisan Café" },
+    { title: "Dashboard for Finlytics" },
+    { title: "Packaging Design for Bloom Skincare" },
+    { title: "Responsive Web App for Jobly" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-black text-white scroll-smooth">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black px-6 py-4 flex justify-between items-center border-b border-gray-800">
+        <div className="text-xl font-bold font-mono text-orange-500">{typedText}<span className="animate-pulse">|</span></div>
+        <div className="space-x-6 hidden md:flex">
+          <a href="#home" className="text-white hover:text-orange-400 transition">Home</a>
+          <a href="#projects" className="text-white hover:text-orange-400 transition">Projects</a>
+          <a href="#pricing" className="text-white hover:text-orange-400 transition">Pricing</a>
+          <a href="#contact" className="text-white hover:text-orange-400 transition">Contact</a>
+        </div>
+        <div className="md:hidden">
+          <button onClick={() => setMenuOpen(!menuOpen)}>
+            <Menu size={24} className="text-white" />
+          </button>
+        </div>
+      </nav>
+      {menuOpen && (
+        <div className="md:hidden bg-black px-6 py-4 flex flex-col space-y-4 fixed top-16 left-0 right-0 z-40 border-t border-gray-800">
+          <a href="#home" onClick={() => setMenuOpen(false)} className="text-white hover:text-orange-400">Home</a>
+          <a href="#projects" onClick={() => setMenuOpen(false)} className="text-white hover:text-orange-400">Projects</a>
+          <a href="#pricing" onClick={() => setMenuOpen(false)} className="text-white hover:text-orange-400">Pricing</a>
+          <a href="#contact" onClick={() => setMenuOpen(false)} className="text-white hover:text-orange-400">Contact</a>
+        </div>
+      )}
+
+      <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 pt-24">
+        <h1 className="text-5xl font-bold font-mono mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-transparent bg-clip-text">{typedText}<span className="animate-pulse text-white">|</span></h1>
+        <p className="text-lg text-gray-400">Welcome to my portfolio</p>
+      </section>
+
+      <section id="projects" className="min-h-screen px-6 py-20 bg-black text-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-10">
+            <h2 className="text-4xl font-bold">We provide cutting-edge digital</h2>
+            <div className="border-t border-gray-700 pt-6">
+              <div className="flex justify-between items-start py-4 border-b border-gray-700">
+                <p className="text-sm text-gray-400">Empower artists to showcase<br />their work globally.</p>
+                <span className="text-sm text-gray-400">2022</span>
+              </div>
+              <div className="flex justify-between items-start py-4">
+                <p className="text-sm text-gray-400">From stunning websites to<br />interactive digital exhibits.</p>
+                <span className="text-sm text-gray-400">2023</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-gray-800 rounded-2xl overflow-hidden aspect-square">
+                <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Image {i + 1}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="md:col-span-2 mt-12 text-center">
+            <h3 className="text-2xl font-semibold mb-2">Our innovative solutions are designed</h3>
+            <p className="text-gray-400 mb-4">We designed to enhance your artistic journey & connect wider audience.</p>
+            <button className="bg-white text-black px-6 py-2 rounded-md">Explore All</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="min-h-screen px-6 py-20">
+        <h2 className="text-3xl font-bold mb-10 text-center">Pricing</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {["Basic", "Standard", "Premium"].map((plan, i) => (
+            <div key={i} className="p-6 rounded-xl shadow text-center bg-gray-900">
+              <h3 className="text-xl font-semibold mb-2">{plan}</h3>
+              <p className="text-2xl font-bold mb-4">${(i + 1) * 100}</p>
+              <ul className="text-sm text-gray-300 mb-6 space-y-2">
+                <li>✔ Feature A</li>
+                <li>✔ Feature B</li>
+                <li>✔ Feature C</li>
+              </ul>
+              <button className="bg-white text-black px-6 py-2 rounded-md">Select</button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" className="min-h-screen px-6 py-20">
+        <h2 className="text-3xl font-bold mb-10 text-center">Contact Me</h2>
+        <form className="max-w-xl mx-auto grid gap-4">
+          <input type="text" placeholder="Name" className="p-3 bg-black text-white border border-gray-700 rounded-lg" />
+          <input type="email" placeholder="Email" className="p-3 bg-black text-white border border-gray-700 rounded-lg" />
+          <textarea placeholder="Message" className="p-3 bg-black text-white border border-gray-700 rounded-lg" rows={5} />
+          <button className="bg-white text-black px-6 py-2 rounded-md">Send</button>
+        </form>
+      </section>
+    </div>
+  );
+};
+
+export default ShaliPortfolio;
